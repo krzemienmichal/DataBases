@@ -1,0 +1,880 @@
+--------------------------------------------------------
+--  File created - pi¹tek-czerwca-04-2021   
+--------------------------------------------------------
+--------------------------------------------------------
+--  DDL for Sequence CLIENT_CLIENT_ID_SEQ
+--------------------------------------------------------
+
+   CREATE SEQUENCE  "PROJEKT2"."CLIENT_CLIENT_ID_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 13 NOCACHE  ORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+--------------------------------------------------------
+--  DDL for Sequence GENRE_GENRE_ID_SEQ
+--------------------------------------------------------
+
+   CREATE SEQUENCE  "PROJEKT2"."GENRE_GENRE_ID_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 1 NOCACHE  ORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+--------------------------------------------------------
+--  DDL for Sequence MOVIE_MOVIE_ID_SEQ
+--------------------------------------------------------
+
+   CREATE SEQUENCE  "PROJEKT2"."MOVIE_MOVIE_ID_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 2 NOCACHE  ORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL ;
+--------------------------------------------------------
+--  DDL for Table CLIENT
+--------------------------------------------------------
+
+  CREATE TABLE "PROJEKT2"."CLIENT" 
+   (	"CLIENT_ID" NUMBER(*,0), 
+	"FIRSTNAME" VARCHAR2(50 BYTE), 
+	"LASTNAME" VARCHAR2(60 BYTE), 
+	"BIRTHDATE" DATE, 
+	"EMAIL" VARCHAR2(40 BYTE), 
+	"USERNAME" VARCHAR2(60 BYTE), 
+	"PASSWORD" VARCHAR2(35 BYTE)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Table GENRE
+--------------------------------------------------------
+
+  CREATE TABLE "PROJEKT2"."GENRE" 
+   (	"GENRE_ID" NUMBER(*,0), 
+	"GENRE" VARCHAR2(50 BYTE)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Table MOVIE
+--------------------------------------------------------
+
+  CREATE TABLE "PROJEKT2"."MOVIE" 
+   (	"MOVIE_ID" NUMBER(*,0), 
+	"TITLE" VARCHAR2(50 BYTE), 
+	"RUNNINGTIME" DATE, 
+	"DIRECTOR" VARCHAR2(70 BYTE), 
+	"PRODUCTIONCOMPANY" VARCHAR2(90 BYTE)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Table MOVIE_GENRE
+--------------------------------------------------------
+
+  CREATE TABLE "PROJEKT2"."MOVIE_GENRE" 
+   (	"MOVIE_ID" NUMBER(*,0), 
+	"GENRE_ID" NUMBER(*,0)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Table PLAN_TO_WATCH
+--------------------------------------------------------
+
+  CREATE TABLE "PROJEKT2"."PLAN_TO_WATCH" 
+   (	"CLIENT_ID" NUMBER(*,0), 
+	"MOVIE_ID" NUMBER(*,0)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Table WATCHED
+--------------------------------------------------------
+
+  CREATE TABLE "PROJEKT2"."WATCHED" 
+   (	"CLIENT_ID" NUMBER(*,0), 
+	"MOVIE_ID" NUMBER(*,0)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for View LIST_CLIENTS
+--------------------------------------------------------
+
+  CREATE OR REPLACE FORCE EDITIONABLE VIEW "PROJEKT2"."LIST_CLIENTS" ("CLIENT_ID", "FIRSTNAME", "LASTNAME", "BD", "EMAIL", "USERNAME", "PASSWORD") AS 
+  SELECT client_id, firstname, lastname,
+to_char(birthdate,'YYYY-MM-DD')as bd, email, username,
+password
+FROM client
+ORDER BY client_id asc
+;
+--------------------------------------------------------
+--  DDL for View LIST_GENRES
+--------------------------------------------------------
+
+  CREATE OR REPLACE FORCE EDITIONABLE VIEW "PROJEKT2"."LIST_GENRES" ("GENRE_ID", "GENRE") AS 
+  SELECT "GENRE_ID","GENRE" FROM genre
+;
+--------------------------------------------------------
+--  DDL for View LIST_MOVIES
+--------------------------------------------------------
+
+  CREATE OR REPLACE FORCE EDITIONABLE VIEW "PROJEKT2"."LIST_MOVIES" ("MOVIE_ID", "TITLE", "RUNNINGTIME", "DIRECTOR", "PRODUCTIONCOMPANY", "Genre") AS 
+  SELECT
+    movie.movie_id,
+    movie.title,
+    to_char(movie.runningtime, 'HH24:MM:SS'),
+    movie.director,
+    movie.productioncompany,
+    LISTAGG(genre.genre, ', ') WITHIN GROUP(
+        ORDER BY
+            genre.genre
+    ) "Genre"
+    
+FROM
+    movie
+    LEFT JOIN movie_genre ON ( movie.movie_id = movie_genre.movie_id )
+    LEFT JOIN genre ON ( genre.genre_id = movie_genre.genre_id )
+GROUP BY
+    movie.movie_id,
+    movie.title,
+    movie.director,
+    movie.productioncompany,
+    movie.runningtime
+;
+--------------------------------------------------------
+--  DDL for View LIST_PTW
+--------------------------------------------------------
+
+  CREATE OR REPLACE FORCE EDITIONABLE VIEW "PROJEKT2"."LIST_PTW" ("USERNAME", "Plan To Watch") AS 
+  SELECT client.Username,
+LISTAGG(movie.Title, ', ') WITHIN GROUP (ORDER BY Title) "Plan To Watch"
+FROM client
+JOIN plan_to_watch ON (client.Client_ID = plan_to_watch.Client_ID)
+JOIN movie ON (movie.Movie_ID = plan_to_watch.Movie_ID)
+GROUP BY client.Username
+;
+--------------------------------------------------------
+--  DDL for View LIST_WATCHED
+--------------------------------------------------------
+
+  CREATE OR REPLACE FORCE EDITIONABLE VIEW "PROJEKT2"."LIST_WATCHED" ("USERNAME", "Plan To Watch") AS 
+  SELECT client.Username,
+LISTAGG(movie.Title, ', ') WITHIN GROUP (ORDER BY Title) "Plan To Watch"
+FROM client
+JOIN watched ON (client.Client_ID = watched.Client_ID)
+JOIN movie ON (movie.Movie_ID = watched.Movie_ID)
+GROUP BY client.Username
+;
+REM INSERTING into PROJEKT2.CLIENT
+SET DEFINE OFF;
+Insert into PROJEKT2.CLIENT (CLIENT_ID,FIRSTNAME,LASTNAME,BIRTHDATE,EMAIL,USERNAME,PASSWORD) values ('1','Mariusz','Kaminski',to_date('90-03-02 00:00:00','YY-MM-DD HH24:MI:SS'),'makka@gmail.com','makky','password123');
+Insert into PROJEKT2.CLIENT (CLIENT_ID,FIRSTNAME,LASTNAME,BIRTHDATE,EMAIL,USERNAME,PASSWORD) values ('2','Jerzy','Kloda',to_date('80-03-12 00:00:00','YY-MM-DD HH24:MI:SS'),'joda@gmail.com','jkloda','123pass');
+Insert into PROJEKT2.CLIENT (CLIENT_ID,FIRSTNAME,LASTNAME,BIRTHDATE,EMAIL,USERNAME,PASSWORD) values ('3','Eddward','Elric',to_date('90-10-21 00:00:00','YY-MM-DD HH24:MI:SS'),'fullmetal@gmail.com','haganero','philosopher233');
+Insert into PROJEKT2.CLIENT (CLIENT_ID,FIRSTNAME,LASTNAME,BIRTHDATE,EMAIL,USERNAME,PASSWORD) values ('4','Alphonse','Elric',to_date('93-11-21 00:00:00','YY-MM-DD HH24:MI:SS'),'armor@gmail.com','plateguy','philosopher133');
+Insert into PROJEKT2.CLIENT (CLIENT_ID,FIRSTNAME,LASTNAME,BIRTHDATE,EMAIL,USERNAME,PASSWORD) values ('5','Andrzej','Zryw',to_date('92-01-21 00:00:00','YY-MM-DD HH24:MI:SS'),'zran@gmail.com','zrywan','haslo');
+Insert into PROJEKT2.CLIENT (CLIENT_ID,FIRSTNAME,LASTNAME,BIRTHDATE,EMAIL,USERNAME,PASSWORD) values ('6','Edmund','Norwegia',to_date('87-05-11 00:00:00','YY-MM-DD HH24:MI:SS'),'norw@gmail.com','egi','pass');
+Insert into PROJEKT2.CLIENT (CLIENT_ID,FIRSTNAME,LASTNAME,BIRTHDATE,EMAIL,USERNAME,PASSWORD) values ('7','Bjorn','Polaken',to_date('69-02-11 00:00:00','YY-MM-DD HH24:MI:SS'),'killer@gmail.com','headshot','oass3');
+Insert into PROJEKT2.CLIENT (CLIENT_ID,FIRSTNAME,LASTNAME,BIRTHDATE,EMAIL,USERNAME,PASSWORD) values ('8','Oilander','Byk',to_date('99-11-06 00:00:00','YY-MM-DD HH24:MI:SS'),'oil@gmail.com','lander','phpher233');
+Insert into PROJEKT2.CLIENT (CLIENT_ID,FIRSTNAME,LASTNAME,BIRTHDATE,EMAIL,USERNAME,PASSWORD) values ('9','War','Apocalipto',to_date('90-10-21 00:00:00','YY-MM-DD HH24:MI:SS'),'war@gmail.com','jerzy','psopher265');
+Insert into PROJEKT2.CLIENT (CLIENT_ID,FIRSTNAME,LASTNAME,BIRTHDATE,EMAIL,USERNAME,PASSWORD) values ('10','Stefan','Tak',to_date('04-02-02 00:00:00','YY-MM-DD HH24:MI:SS'),'correct@gmail.com','approval','ppwa33');
+Insert into PROJEKT2.CLIENT (CLIENT_ID,FIRSTNAME,LASTNAME,BIRTHDATE,EMAIL,USERNAME,PASSWORD) values ('11','War123','Apocaliptos',to_date('90-10-21 00:00:00','YY-MM-DD HH24:MI:SS'),'war112@gmail.com','jerzyda','fadfdas');
+Insert into PROJEKT2.CLIENT (CLIENT_ID,FIRSTNAME,LASTNAME,BIRTHDATE,EMAIL,USERNAME,PASSWORD) values ('12','Michal','K',to_date('92-02-11 00:00:00','YY-MM-DD HH24:MI:SS'),'mk@mail.com','dfadsa','dasczxcqw');
+REM INSERTING into PROJEKT2.GENRE
+SET DEFINE OFF;
+Insert into PROJEKT2.GENRE (GENRE_ID,GENRE) values ('1','Action');
+Insert into PROJEKT2.GENRE (GENRE_ID,GENRE) values ('2','Horror');
+Insert into PROJEKT2.GENRE (GENRE_ID,GENRE) values ('3','Drama');
+Insert into PROJEKT2.GENRE (GENRE_ID,GENRE) values ('4','SciFi');
+Insert into PROJEKT2.GENRE (GENRE_ID,GENRE) values ('5','Animation');
+Insert into PROJEKT2.GENRE (GENRE_ID,GENRE) values ('6','Comedy');
+Insert into PROJEKT2.GENRE (GENRE_ID,GENRE) values ('7','Thriller');
+REM INSERTING into PROJEKT2.MOVIE
+SET DEFINE OFF;
+Insert into PROJEKT2.MOVIE (MOVIE_ID,TITLE,RUNNINGTIME,DIRECTOR,PRODUCTIONCOMPANY) values ('1','Avengers',to_date('21-06-01 02:00:00','YY-MM-DD HH24:MI:SS'),'Joss Whedon','Marvel');
+Insert into PROJEKT2.MOVIE (MOVIE_ID,TITLE,RUNNINGTIME,DIRECTOR,PRODUCTIONCOMPANY) values ('2','Pet Semetary',to_date('21-06-01 01:41:00','YY-MM-DD HH24:MI:SS'),'Kelvin Kolsh','Di Bonaventura Pictures');
+Insert into PROJEKT2.MOVIE (MOVIE_ID,TITLE,RUNNINGTIME,DIRECTOR,PRODUCTIONCOMPANY) values ('3','Shrek',to_date('21-06-01 01:30:00','YY-MM-DD HH24:MI:SS'),'Andrew Adamson','DreamWorks');
+Insert into PROJEKT2.MOVIE (MOVIE_ID,TITLE,RUNNINGTIME,DIRECTOR,PRODUCTIONCOMPANY) values ('4','Shrek 2',to_date('21-06-01 01:32:00','YY-MM-DD HH24:MI:SS'),'Andrew Adamson','DreamWorks');
+Insert into PROJEKT2.MOVIE (MOVIE_ID,TITLE,RUNNINGTIME,DIRECTOR,PRODUCTIONCOMPANY) values ('5','Shrek 3',to_date('21-06-01 01:33:00','YY-MM-DD HH24:MI:SS'),'Chris Miller','DreamWorks');
+Insert into PROJEKT2.MOVIE (MOVIE_ID,TITLE,RUNNINGTIME,DIRECTOR,PRODUCTIONCOMPANY) values ('6','Thor:Rangarok',to_date('21-06-01 02:10:00','YY-MM-DD HH24:MI:SS'),'Taiki Waititi','Marvel');
+Insert into PROJEKT2.MOVIE (MOVIE_ID,TITLE,RUNNINGTIME,DIRECTOR,PRODUCTIONCOMPANY) values ('7','Shining',to_date('21-06-01 02:00:00','YY-MM-DD HH24:MI:SS'),'Stanley Kubrick','Warner Bros. Pictures');
+Insert into PROJEKT2.MOVIE (MOVIE_ID,TITLE,RUNNINGTIME,DIRECTOR,PRODUCTIONCOMPANY) values ('8','Treasure Planet',to_date('21-06-01 01:41:00','YY-MM-DD HH24:MI:SS'),'Kelvin Kolsh','Di Bonaventura Pictures');
+Insert into PROJEKT2.MOVIE (MOVIE_ID,TITLE,RUNNINGTIME,DIRECTOR,PRODUCTIONCOMPANY) values ('9','Lalaland',to_date('21-06-01 02:06:00','YY-MM-DD HH24:MI:SS'),'Damie Chazelle','Summit Entertainment');
+Insert into PROJEKT2.MOVIE (MOVIE_ID,TITLE,RUNNINGTIME,DIRECTOR,PRODUCTIONCOMPANY) values ('10','Dungeon and Dragons',to_date('21-06-01 02:22:00','YY-MM-DD HH24:MI:SS'),'Courtney Solomon','Silver Pictures');
+Insert into PROJEKT2.MOVIE (MOVIE_ID,TITLE,RUNNINGTIME,DIRECTOR,PRODUCTIONCOMPANY) values ('11','Godzilla',to_date('21-06-01 01:20:00','YY-MM-DD HH24:MI:SS'),'Tomoyuki Tanaka','Toho Studios');
+Insert into PROJEKT2.MOVIE (MOVIE_ID,TITLE,RUNNINGTIME,DIRECTOR,PRODUCTIONCOMPANY) values ('12','Shrek Forever',to_date('21-06-01 01:33:00','YY-MM-DD HH24:MI:SS'),'Mike Mitchell','DreamWorks');
+REM INSERTING into PROJEKT2.MOVIE_GENRE
+SET DEFINE OFF;
+Insert into PROJEKT2.MOVIE_GENRE (MOVIE_ID,GENRE_ID) values ('1','1');
+Insert into PROJEKT2.MOVIE_GENRE (MOVIE_ID,GENRE_ID) values ('1','4');
+Insert into PROJEKT2.MOVIE_GENRE (MOVIE_ID,GENRE_ID) values ('2','2');
+Insert into PROJEKT2.MOVIE_GENRE (MOVIE_ID,GENRE_ID) values ('2','7');
+Insert into PROJEKT2.MOVIE_GENRE (MOVIE_ID,GENRE_ID) values ('3','5');
+Insert into PROJEKT2.MOVIE_GENRE (MOVIE_ID,GENRE_ID) values ('3','6');
+Insert into PROJEKT2.MOVIE_GENRE (MOVIE_ID,GENRE_ID) values ('4','2');
+Insert into PROJEKT2.MOVIE_GENRE (MOVIE_ID,GENRE_ID) values ('4','5');
+Insert into PROJEKT2.MOVIE_GENRE (MOVIE_ID,GENRE_ID) values ('5','1');
+Insert into PROJEKT2.MOVIE_GENRE (MOVIE_ID,GENRE_ID) values ('5','7');
+Insert into PROJEKT2.MOVIE_GENRE (MOVIE_ID,GENRE_ID) values ('6','2');
+Insert into PROJEKT2.MOVIE_GENRE (MOVIE_ID,GENRE_ID) values ('6','4');
+Insert into PROJEKT2.MOVIE_GENRE (MOVIE_ID,GENRE_ID) values ('7','2');
+Insert into PROJEKT2.MOVIE_GENRE (MOVIE_ID,GENRE_ID) values ('7','3');
+Insert into PROJEKT2.MOVIE_GENRE (MOVIE_ID,GENRE_ID) values ('8','2');
+Insert into PROJEKT2.MOVIE_GENRE (MOVIE_ID,GENRE_ID) values ('8','6');
+Insert into PROJEKT2.MOVIE_GENRE (MOVIE_ID,GENRE_ID) values ('9','1');
+Insert into PROJEKT2.MOVIE_GENRE (MOVIE_ID,GENRE_ID) values ('9','4');
+Insert into PROJEKT2.MOVIE_GENRE (MOVIE_ID,GENRE_ID) values ('10','2');
+Insert into PROJEKT2.MOVIE_GENRE (MOVIE_ID,GENRE_ID) values ('10','6');
+Insert into PROJEKT2.MOVIE_GENRE (MOVIE_ID,GENRE_ID) values ('11','3');
+Insert into PROJEKT2.MOVIE_GENRE (MOVIE_ID,GENRE_ID) values ('11','5');
+Insert into PROJEKT2.MOVIE_GENRE (MOVIE_ID,GENRE_ID) values ('12','1');
+Insert into PROJEKT2.MOVIE_GENRE (MOVIE_ID,GENRE_ID) values ('12','2');
+Insert into PROJEKT2.MOVIE_GENRE (MOVIE_ID,GENRE_ID) values ('12','3');
+Insert into PROJEKT2.MOVIE_GENRE (MOVIE_ID,GENRE_ID) values ('12','7');
+REM INSERTING into PROJEKT2.PLAN_TO_WATCH
+SET DEFINE OFF;
+Insert into PROJEKT2.PLAN_TO_WATCH (CLIENT_ID,MOVIE_ID) values ('1','3');
+Insert into PROJEKT2.PLAN_TO_WATCH (CLIENT_ID,MOVIE_ID) values ('2','1');
+Insert into PROJEKT2.PLAN_TO_WATCH (CLIENT_ID,MOVIE_ID) values ('3','1');
+Insert into PROJEKT2.PLAN_TO_WATCH (CLIENT_ID,MOVIE_ID) values ('3','2');
+Insert into PROJEKT2.PLAN_TO_WATCH (CLIENT_ID,MOVIE_ID) values ('3','3');
+REM INSERTING into PROJEKT2.WATCHED
+SET DEFINE OFF;
+Insert into PROJEKT2.WATCHED (CLIENT_ID,MOVIE_ID) values ('1','1');
+Insert into PROJEKT2.WATCHED (CLIENT_ID,MOVIE_ID) values ('1','2');
+Insert into PROJEKT2.WATCHED (CLIENT_ID,MOVIE_ID) values ('2','3');
+--------------------------------------------------------
+--  DDL for Index CLIENT_PK
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "PROJEKT2"."CLIENT_PK" ON "PROJEKT2"."CLIENT" ("CLIENT_ID") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Index MOVIE_PK
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "PROJEKT2"."MOVIE_PK" ON "PROJEKT2"."MOVIE" ("MOVIE_ID") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Index MOVIE_GENRE_PK
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "PROJEKT2"."MOVIE_GENRE_PK" ON "PROJEKT2"."MOVIE_GENRE" ("MOVIE_ID", "GENRE_ID") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Index PLAN_TO_WATCH_PK
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "PROJEKT2"."PLAN_TO_WATCH_PK" ON "PROJEKT2"."PLAN_TO_WATCH" ("CLIENT_ID", "MOVIE_ID") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Index GENRE_PK
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "PROJEKT2"."GENRE_PK" ON "PROJEKT2"."GENRE" ("GENRE_ID") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Index WATCHED_PK
+--------------------------------------------------------
+
+  CREATE UNIQUE INDEX "PROJEKT2"."WATCHED_PK" ON "PROJEKT2"."WATCHED" ("CLIENT_ID", "MOVIE_ID") 
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+--------------------------------------------------------
+--  DDL for Trigger CHECK_EMAIL
+--------------------------------------------------------
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "PROJEKT2"."CHECK_EMAIL" 
+BEFORE INSERT OR UPDATE ON CLIENT
+REFERENCING  NEW AS NEW OLD AS OLD
+FOR EACH ROW
+BEGIN
+    IF(:new.email NOT LIKE '%_@__%.___%')
+    THEN
+        RAISE_APPLICATION_ERROR(-20000, 'Incorret email addres');
+    END IF;
+END;
+
+create or replace PROCEDURE ADDCLIENT 
+(
+  FN IN VARCHAR2 
+, LN IN VARCHAR2 
+, BD IN VARCHAR2 
+, EL IN VARCHAR2 
+, USRNM IN VARCHAR2 
+, PSWD IN VARCHAR2 
+) AS 
+BEGIN
+INSERT INTO client
+VALUES(NULL,FN, LN, to_date(BD,'YYYY-MM-DD'), EL, USRNM, PSWD);
+END ADDCLIENT;
+
+create or replace NONEDITIONABLE PROCEDURE UpdateClient
+(
+    C_ID IN INT,
+    fn IN VARCHAR2,
+    ln IN VARCHAR2,
+    bd IN VARCHAR2,
+    El IN VARCHAR2,
+    Usrnm VARCHAR2
+)
+IS
+BEGIN
+UPDATE client SET
+FirstName = fn,
+LastName = ln,
+BirthDate = to_date(bd, 'YYYY-MM-DD'),
+Email = El,
+Username = Usrnm
+WHERE client.Client_ID = C_ID;
+END;
+
+CREATE OR REPLACE PROCEDURE delete_client (c_id IN INT)
+AS
+BEGIN
+DELETE FROM client where client.client_id = c_id;
+END;
+
+CREATE OR REPLACE PROCEDURE change_password (c_id IN INT,pas IN VARCHAR)
+AS
+BEGIN
+UPDATE client
+SET password = pas
+WHERE client.client_id = c_id;
+END;
+
+CREATE OR REPLACE PROCEDURE add_movie
+    (tl IN VARCHAR2,
+    rt IN VARCHAR2,
+    dir IN VARCHAR2,
+    pc IN VARCHAR2)
+IS
+BEGIN 
+INSERT INTO movie
+VALUES(NULL,tl, to_date(rt, 'HH24:MM:SS'), dir, pc);
+END;
+
+CREATE OR REPLACE PROCEDURE update_movie
+    (tl IN VARCHAR2,
+    rt IN VARCHAR2,
+    dir IN VARCHAR2,
+    pc IN VARCHAR2)
+IS
+BEGIN 
+UPDATE movie
+SET
+title = tl,
+runningtime = to_date(rt, 'HH24:MM:SS'),
+director = dir,
+productioncompany=pc;
+END;
+
+CREATE OR REPLACE PROCEDURE delete_movie
+(m_id IN INT) IS
+BEGIN
+DELETE FROM movie
+WHERE movie.movie_id = m_id;
+END;
+
+CREATE OR REPLACE PROCEDURE add_movie_genre(
+m_title IN VARCHAR2,
+gn IN VARCHAR2) AS
+G_ID INT := 0;
+M_ID INT := 0;
+BEGIN
+SELECT genre_id INTO G_ID from genre WHERE genre.genre = gn;
+SELECT movie_id INTO M_ID FROM movie WHERE movie.title = m_title;
+INSERT INTO movie_genre VALUES(M_ID, G_ID);
+END;
+
+CREATE OR REPLACE PROCEDURE rm_gen_movie(
+m_title IN VARCHAR2,
+gn IN VARCHAR2) AS
+G_ID INT := 0;
+M_ID INT := 0;
+BEGIN
+SELECT genre_id INTO G_ID from genre WHERE genre.genre = gn;
+SELECT movie_id INTO M_ID FROM movie WHERE movie.title = m_title;
+DELETE FROM movie_genre WHERE movie_id = M_ID AND genre_id = G_ID;
+END;
+
+CREATE OR REPLACE PROCEDURE add_genre(
+    GN IN VARCHAR2)
+AS 
+BEGIN
+INSERT INTO genre VALUES(NULL, GN);
+END;
+
+CREATE OR REPLACE PROCEDURE add_ptw(
+usrnm IN VARCHAR2,
+m_title IN VARCHAR2)
+AS
+M_ID INT :=0;
+C_ID INT :=0;
+BEGIN
+SELECT client_id INTO C_ID FROM client WHERE username = usrnm;
+SELECT movie_id INTO M_ID FROM movie WHERE title = m_title;
+INSERT INTO plan_to_watch VALUES(C_ID, M_ID);
+END;
+
+CREATE OR REPLACE PROCEDURE rm_ptw(
+usrnm IN VARCHAR2,
+m_title IN VARCHAR2)
+AS
+M_ID INT :=0;
+C_ID INT :=0;
+BEGIN
+SELECT client_id INTO C_ID FROM client WHERE username = usrnm;
+SELECT movie_id INTO M_ID FROM movie WHERE title = m_title;
+DELETE FROM plan_to_watch
+WHERE client_id = C_ID AND movie_id = M_ID;
+END;
+
+CREATE OR REPLACE PROCEDURE add_watched(
+usrnm IN VARCHAR2,
+m_title IN VARCHAR2)
+AS
+M_ID INT :=0;
+C_ID INT :=0;
+BEGIN
+SELECT client_id INTO C_ID FROM client WHERE username = usrnm;
+SELECT movie_id INTO M_ID FROM movie WHERE title = m_title;
+INSERT INTO watched VALUES(C_ID, M_ID);
+END;
+
+CREATE OR REPLACE PROCEDURE rm_watched(
+usrnm IN VARCHAR2,
+m_title IN VARCHAR2)
+AS
+M_ID INT :=0;
+C_ID INT :=0;
+BEGIN
+SELECT client_id INTO C_ID FROM client WHERE username = usrnm;
+SELECT movie_id INTO M_ID FROM movie WHERE title = m_title;
+DELETE FROM watched
+WHERE client_id = C_ID AND movie_id = M_ID;
+END;
+/
+ALTER TRIGGER "PROJEKT2"."CHECK_EMAIL" ENABLE;
+--------------------------------------------------------
+--  DDL for Trigger CLIENT_CLIENT_ID_TRG
+--------------------------------------------------------
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "PROJEKT2"."CLIENT_CLIENT_ID_TRG" BEFORE
+    INSERT ON client
+    FOR EACH ROW
+     WHEN ( new.client_id IS NULL ) BEGIN
+    :new.client_id := client_client_id_seq.nextval;
+END;
+
+/
+ALTER TRIGGER "PROJEKT2"."CLIENT_CLIENT_ID_TRG" ENABLE;
+--------------------------------------------------------
+--  DDL for Trigger GENRE_GENRE_ID_TRG
+--------------------------------------------------------
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "PROJEKT2"."GENRE_GENRE_ID_TRG" BEFORE
+    INSERT ON genre
+    FOR EACH ROW
+     WHEN ( new.genre_id IS NULL ) BEGIN
+    :new.genre_id := genre_genre_id_seq.nextval;
+END;
+
+/
+ALTER TRIGGER "PROJEKT2"."GENRE_GENRE_ID_TRG" ENABLE;
+--------------------------------------------------------
+--  DDL for Trigger MOVIE_MOVIE_ID_TRG
+--------------------------------------------------------
+
+  CREATE OR REPLACE EDITIONABLE TRIGGER "PROJEKT2"."MOVIE_MOVIE_ID_TRG" BEFORE
+    INSERT ON movie
+    FOR EACH ROW
+     WHEN ( new.movie_id IS NULL ) BEGIN
+    :new.movie_id := movie_movie_id_seq.nextval;
+END;
+
+/
+ALTER TRIGGER "PROJEKT2"."MOVIE_MOVIE_ID_TRG" ENABLE;
+--------------------------------------------------------
+--  DDL for Procedure ADDCLIENT
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "PROJEKT2"."ADDCLIENT" 
+(
+  FN IN VARCHAR2 
+, LN IN VARCHAR2 
+, BD IN VARCHAR2 
+, EL IN VARCHAR2 
+, USRNM IN VARCHAR2 
+, PSWD IN VARCHAR2 
+) AS 
+BEGIN
+INSERT INTO client
+VALUES(NULL,FN, LN, to_date(BD,'YYYY-MM-DD'), EL, USRNM, PSWD);
+END ADDCLIENT;
+
+/
+--------------------------------------------------------
+--  DDL for Procedure ADD_GENRE
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "PROJEKT2"."ADD_GENRE" (
+    GN IN VARCHAR2)
+AS 
+BEGIN
+INSERT INTO genre VALUES(NULL, GN);
+END;
+
+/
+--------------------------------------------------------
+--  DDL for Procedure ADD_MOVIE
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "PROJEKT2"."ADD_MOVIE" 
+    (tl IN VARCHAR2,
+    rt IN VARCHAR2,
+    dir IN VARCHAR2,
+    pc IN VARCHAR2)
+IS
+BEGIN 
+INSERT INTO movie
+VALUES(NULL,tl, to_date(rt, 'HH24:MM:SS'), dir, pc);
+END;
+
+/
+--------------------------------------------------------
+--  DDL for Procedure ADD_MOVIE_GENRE
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "PROJEKT2"."ADD_MOVIE_GENRE" (
+m_title IN VARCHAR2,
+gn IN VARCHAR2) AS
+G_ID INT := 0;
+M_ID INT := 0;
+BEGIN
+SELECT genre_id INTO G_ID from genre WHERE genre.genre = gn;
+SELECT movie_id INTO M_ID FROM movie WHERE movie.title = m_title;
+INSERT INTO movie_genre VALUES(M_ID, G_ID);
+END;
+
+/
+--------------------------------------------------------
+--  DDL for Procedure ADD_PTW
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "PROJEKT2"."ADD_PTW" (
+usrnm IN VARCHAR2,
+m_title IN VARCHAR2)
+AS
+M_ID INT :=0;
+C_ID INT :=0;
+BEGIN
+SELECT client_id INTO C_ID FROM client WHERE username = usrnm;
+SELECT movie_id INTO M_ID FROM movie WHERE title = m_title;
+INSERT INTO plan_to_watch VALUES(C_ID, M_ID);
+END;
+
+/
+--------------------------------------------------------
+--  DDL for Procedure ADD_WATCHED
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "PROJEKT2"."ADD_WATCHED" (
+usrnm IN VARCHAR2,
+m_title IN VARCHAR2)
+AS
+M_ID INT :=0;
+C_ID INT :=0;
+BEGIN
+SELECT client_id INTO C_ID FROM client WHERE username = usrnm;
+SELECT movie_id INTO M_ID FROM movie WHERE title = m_title;
+INSERT INTO watched VALUES(C_ID, M_ID);
+END;
+
+/
+--------------------------------------------------------
+--  DDL for Procedure CHANGE_PASSWORD
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "PROJEKT2"."CHANGE_PASSWORD" (c_id IN INT,pas IN VARCHAR)
+AS
+BEGIN
+UPDATE client
+SET password = pas
+WHERE client.client_id = c_id;
+END;
+
+/
+--------------------------------------------------------
+--  DDL for Procedure DELETE_CLIENT
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "PROJEKT2"."DELETE_CLIENT" (c_id IN INT)
+AS
+BEGIN
+DELETE FROM client where client.client_id = c_id;
+END;
+
+/
+--------------------------------------------------------
+--  DDL for Procedure DELETE_MOVIE
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "PROJEKT2"."DELETE_MOVIE" 
+(m_id IN INT) IS
+BEGIN
+DELETE FROM movie
+WHERE movie.movie_id = m_id;
+END;
+
+/
+--------------------------------------------------------
+--  DDL for Procedure RM_GEN_MOVIE
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "PROJEKT2"."RM_GEN_MOVIE" (
+m_title IN VARCHAR2,
+gn IN VARCHAR2) AS
+G_ID INT := 0;
+M_ID INT := 0;
+BEGIN
+SELECT genre_id INTO G_ID from genre WHERE genre.genre = gn;
+SELECT movie_id INTO M_ID FROM movie WHERE movie.title = m_title;
+DELETE FROM movie_genre WHERE movie_id = M_ID AND genre_id = G_ID;
+END;
+
+/
+--------------------------------------------------------
+--  DDL for Procedure RM_PTW
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "PROJEKT2"."RM_PTW" (
+usrnm IN VARCHAR2,
+m_title IN VARCHAR2)
+AS
+M_ID INT :=0;
+C_ID INT :=0;
+BEGIN
+SELECT client_id INTO C_ID FROM client WHERE username = usrnm;
+SELECT movie_id INTO M_ID FROM movie WHERE title = m_title;
+DELETE FROM plan_to_watch
+WHERE client_id = C_ID AND movie_id = M_ID;
+END;
+
+/
+--------------------------------------------------------
+--  DDL for Procedure RM_WATCHED
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "PROJEKT2"."RM_WATCHED" (
+usrnm IN VARCHAR2,
+m_title IN VARCHAR2)
+AS
+M_ID INT :=0;
+C_ID INT :=0;
+BEGIN
+SELECT client_id INTO C_ID FROM client WHERE username = usrnm;
+SELECT movie_id INTO M_ID FROM movie WHERE title = m_title;
+DELETE FROM watched
+WHERE client_id = C_ID AND movie_id = M_ID;
+END;
+
+/
+--------------------------------------------------------
+--  DDL for Procedure UPDATECLIENT
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE NONEDITIONABLE PROCEDURE "PROJEKT2"."UPDATECLIENT" 
+(
+    C_ID IN INT,
+    fn IN VARCHAR2,
+    ln IN VARCHAR2,
+    bd IN VARCHAR2,
+    El IN VARCHAR2,
+    Usrnm VARCHAR2
+)
+IS
+BEGIN
+UPDATE client SET
+FirstName = fn,
+LastName = ln,
+BirthDate = to_date(bd, 'YYYY-MM-DD'),
+Email = El,
+Username = Usrnm
+WHERE client.Client_ID = C_ID;
+END;
+
+/
+--------------------------------------------------------
+--  DDL for Procedure UPDATE_MOVIE
+--------------------------------------------------------
+set define off;
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "PROJEKT2"."UPDATE_MOVIE" 
+    (m_id IN INT,
+    tl IN VARCHAR2,
+    rt IN VARCHAR2,
+    dir IN VARCHAR2,
+    pc IN VARCHAR2)
+IS
+BEGIN 
+UPDATE movie
+SET
+title = tl,
+runningtime = to_date(rt, 'HH24:MM:SS'),
+director = dir,
+productioncompany=pc
+WHERE movie.movie_id = m_id;
+END;
+
+/
+--------------------------------------------------------
+--  Constraints for Table WATCHED
+--------------------------------------------------------
+
+  ALTER TABLE "PROJEKT2"."WATCHED" MODIFY ("CLIENT_ID" NOT NULL ENABLE);
+  ALTER TABLE "PROJEKT2"."WATCHED" MODIFY ("MOVIE_ID" NOT NULL ENABLE);
+  ALTER TABLE "PROJEKT2"."WATCHED" ADD CONSTRAINT "WATCHED_PK" PRIMARY KEY ("CLIENT_ID", "MOVIE_ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE;
+--------------------------------------------------------
+--  Constraints for Table GENRE
+--------------------------------------------------------
+
+  ALTER TABLE "PROJEKT2"."GENRE" MODIFY ("GENRE_ID" NOT NULL ENABLE);
+  ALTER TABLE "PROJEKT2"."GENRE" MODIFY ("GENRE" NOT NULL ENABLE);
+  ALTER TABLE "PROJEKT2"."GENRE" ADD CONSTRAINT "GENRE_PK" PRIMARY KEY ("GENRE_ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE;
+--------------------------------------------------------
+--  Constraints for Table MOVIE
+--------------------------------------------------------
+
+  ALTER TABLE "PROJEKT2"."MOVIE" MODIFY ("MOVIE_ID" NOT NULL ENABLE);
+  ALTER TABLE "PROJEKT2"."MOVIE" MODIFY ("TITLE" NOT NULL ENABLE);
+  ALTER TABLE "PROJEKT2"."MOVIE" MODIFY ("RUNNINGTIME" NOT NULL ENABLE);
+  ALTER TABLE "PROJEKT2"."MOVIE" MODIFY ("DIRECTOR" NOT NULL ENABLE);
+  ALTER TABLE "PROJEKT2"."MOVIE" MODIFY ("PRODUCTIONCOMPANY" NOT NULL ENABLE);
+  ALTER TABLE "PROJEKT2"."MOVIE" ADD CONSTRAINT "MOVIE_PK" PRIMARY KEY ("MOVIE_ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE;
+--------------------------------------------------------
+--  Constraints for Table PLAN_TO_WATCH
+--------------------------------------------------------
+
+  ALTER TABLE "PROJEKT2"."PLAN_TO_WATCH" MODIFY ("CLIENT_ID" NOT NULL ENABLE);
+  ALTER TABLE "PROJEKT2"."PLAN_TO_WATCH" MODIFY ("MOVIE_ID" NOT NULL ENABLE);
+  ALTER TABLE "PROJEKT2"."PLAN_TO_WATCH" ADD CONSTRAINT "PLAN_TO_WATCH_PK" PRIMARY KEY ("CLIENT_ID", "MOVIE_ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE;
+--------------------------------------------------------
+--  Constraints for Table MOVIE_GENRE
+--------------------------------------------------------
+
+  ALTER TABLE "PROJEKT2"."MOVIE_GENRE" MODIFY ("MOVIE_ID" NOT NULL ENABLE);
+  ALTER TABLE "PROJEKT2"."MOVIE_GENRE" MODIFY ("GENRE_ID" NOT NULL ENABLE);
+  ALTER TABLE "PROJEKT2"."MOVIE_GENRE" ADD CONSTRAINT "MOVIE_GENRE_PK" PRIMARY KEY ("MOVIE_ID", "GENRE_ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE;
+--------------------------------------------------------
+--  Constraints for Table CLIENT
+--------------------------------------------------------
+
+  ALTER TABLE "PROJEKT2"."CLIENT" MODIFY ("CLIENT_ID" NOT NULL ENABLE);
+  ALTER TABLE "PROJEKT2"."CLIENT" MODIFY ("FIRSTNAME" NOT NULL ENABLE);
+  ALTER TABLE "PROJEKT2"."CLIENT" MODIFY ("LASTNAME" NOT NULL ENABLE);
+  ALTER TABLE "PROJEKT2"."CLIENT" MODIFY ("BIRTHDATE" NOT NULL ENABLE);
+  ALTER TABLE "PROJEKT2"."CLIENT" MODIFY ("EMAIL" NOT NULL ENABLE);
+  ALTER TABLE "PROJEKT2"."CLIENT" MODIFY ("USERNAME" NOT NULL ENABLE);
+  ALTER TABLE "PROJEKT2"."CLIENT" ADD CONSTRAINT "CLIENT_PK" PRIMARY KEY ("CLIENT_ID")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE;
+--------------------------------------------------------
+--  Ref Constraints for Table MOVIE_GENRE
+--------------------------------------------------------
+
+  ALTER TABLE "PROJEKT2"."MOVIE_GENRE" ADD CONSTRAINT "MOVIE_GENRE_GENRE_FK" FOREIGN KEY ("GENRE_ID")
+	  REFERENCES "PROJEKT2"."GENRE" ("GENRE_ID") ENABLE;
+  ALTER TABLE "PROJEKT2"."MOVIE_GENRE" ADD CONSTRAINT "MOVIE_GENRE_MOVIE_FK" FOREIGN KEY ("MOVIE_ID")
+	  REFERENCES "PROJEKT2"."MOVIE" ("MOVIE_ID") ENABLE;
+--------------------------------------------------------
+--  Ref Constraints for Table PLAN_TO_WATCH
+--------------------------------------------------------
+
+  ALTER TABLE "PROJEKT2"."PLAN_TO_WATCH" ADD CONSTRAINT "PLAN_TO_WATCH_CLIENT_FK" FOREIGN KEY ("CLIENT_ID")
+	  REFERENCES "PROJEKT2"."CLIENT" ("CLIENT_ID") ON DELETE CASCADE ENABLE;
+  ALTER TABLE "PROJEKT2"."PLAN_TO_WATCH" ADD CONSTRAINT "PLAN_TO_WATCH_MOVIE_FK" FOREIGN KEY ("MOVIE_ID")
+	  REFERENCES "PROJEKT2"."MOVIE" ("MOVIE_ID") ON DELETE CASCADE ENABLE;
+--------------------------------------------------------
+--  Ref Constraints for Table WATCHED
+--------------------------------------------------------
+
+  ALTER TABLE "PROJEKT2"."WATCHED" ADD CONSTRAINT "WATCHED_CLIENT_FK" FOREIGN KEY ("CLIENT_ID")
+	  REFERENCES "PROJEKT2"."CLIENT" ("CLIENT_ID") ON DELETE CASCADE ENABLE;
+  ALTER TABLE "PROJEKT2"."WATCHED" ADD CONSTRAINT "WATCHED_MOVIE_FK" FOREIGN KEY ("MOVIE_ID")
+	  REFERENCES "PROJEKT2"."MOVIE" ("MOVIE_ID") ON DELETE CASCADE ENABLE;
